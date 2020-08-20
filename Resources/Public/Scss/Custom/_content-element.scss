@@ -1,0 +1,60 @@
+//
+// Frame Header
+//
+.frame-header {
+  *:last-child {
+    margin-bottom: 1.5*$spacer;
+  }
+}
+
+//
+// Pictures
+//
+figure {
+  margin-bottom: 1.7em;
+}
+.frame-type-textpic, .frame-type-image {
+  .gallery-item {
+    text-align: center;
+  }
+  figure {
+    display: inline-block;
+    text-align: left;
+  }
+}
+
+//
+// Text and image
+//
+.textpic {
+  .gallery-item img, .gallery-item picture {
+    width: auto;
+  }
+}
+
+//
+// Text and image/media
+//
+.textmedia-below .textmedia-text,
+.textpic-below .textmedia-text,
+.textmedia-below .textpic-text,
+.textpic-below .textpic-text {
+  margin-bottom: 1.5rem;
+}
+
+//
+// Social links
+//
+.frame-type-social_links {
+  .sociallinks-list {
+    text-align: center;
+    .sociallinks-item {
+      display: inline-block;
+      margin-left: 0.3em;
+      margin-right: 0.3em;
+    }
+    .sociallinks-link-label {
+      display: none;
+    }
+  }
+}

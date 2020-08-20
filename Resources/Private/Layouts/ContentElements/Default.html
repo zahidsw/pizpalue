@@ -1,0 +1,231 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      xmlns:bk2k="http://typo3.org/ns/BK2K/BootstrapPackage/ViewHelpers"
+      xmlns:v="http://typo3.org/ns/FluidTYPO3/Vhs/ViewHelpers"
+      xmlns:pp="http://typo3.org/ns/Buepro/Pizpalue/ViewHelpers"
+      data-namespace-typo3-fluid="true">
+
+<f:comment>
+    <!--
+        @todo Add 3D parallax by adding parallax frame in frame selector dialog
+        @see https://keithclark.co.uk/articles/pure-css-parallax-websites/
+        @see https://medium.com/@dhg/parallax-done-right-82ced812e61c
+        @see https://jsfiddle.net/cruznunez/gkxr9r2s/48/
+        @see https://github.com/aentan/Parallax-Scroll
+    -->
+</f:comment>
+<f:spaceless>
+    <bk2k:data.imageVariants as="variants" variants="{v:variable.get(name: 'settings.responsiveimages.{data.tx_pizpalue_image_variants}')}" />
+
+    <f:variable name="backendlayoutConfig">{settings.responsiveimages.backendlayout.{backendlayout}}</f:variable>
+    <f:variable name="columnConfig">{backendlayoutConfig.{data.colPos}}</f:variable>
+    <f:if condition="{columnConfig}">
+        <bk2k:data.imageVariants as="variants" variants="{variants}" multiplier="{columnConfig.multiplier}" gutters="{columnConfig.gutters}" corrections="{columnConfig.corrections}" />
+    </f:if>
+
+    <f:variable name="frameClass">frame-{data.frame_class}</f:variable>
+    <f:variable name="typeClass">frame-type-{data.CType}</f:variable>
+    <f:variable name="layoutClass">frame-layout-{data.layout}</f:variable>
+    <f:variable name="backgroundClass">frame-background-{f:if(condition: data.background_color_class, else: 'none', then: data.background_color_class)}</f:variable>
+    <f:variable name="spaceBeforeClass">frame-space-before-{f:if(condition: data.space_before_class, else: 'none', then: data.space_before_class)}</f:variable>
+    <f:variable name="spaceAfterClass">frame-space-after-{f:if(condition: data.space_after_class, else: 'none', then: data.space_after_class)}</f:variable>
+
+
+    <f:comment>====================== Pizpalue init attributes ======================</f:comment>
+
+    <f:variable name="backgroundImageClass">{f:if(condition: '{backgroundImage.0} || {tx_pizpalue_bgmedia}', then: 'frame-has-backgroundimage', else: 'frame-no-backgroundimage')}</f:variable>
+
+    {f:variable(name:'ppClasses', value:'')}
+    <f:if condition="{data.frame_class} != none">
+        <f:variable name="ppClasses">
+            frame {frameClass} {typeClass} {layoutClass} {backgroundClass} {backgroundImageClass} {spaceBeforeClass} {spaceAfterClass}
+        </f:variable>
+    </f:if>
+    {f:variable(name:'ppStyles', value:'')}
+    {f:variable(name:'ppAttributes', value:'')}
+
+    <f:comment>====================== Pizpalue scroll animation ======================</f:comment>
+
+    <f:switch expression="{data.frame_class}">
+        <f:defaultCase>{f:variable(name:'ppScrollAttr', value:'')}</f:defaultCase>
+        <f:case value="pp-scrollanimation1">
+            <f:variable name="ppScrollAttr">{pizpalue.features.scrollAnimation.frame1Attributes}</f:variable>
+        </f:case>
+        <f:case value="pp-scrollanimation2">
+            <f:variable name="ppScrollAttr">{pizpalue.features.scrollAnimation.frame2Attributes}</f:variable>
+        </f:case>
+        <f:case value="pp-scrollanimation3">
+            <f:variable name="ppScrollAttr">{pizpalue.features.scrollAnimation.frame3Attributes}</f:variable>
+        </f:case>
+    </f:switch>
+    <f:if condition="{ppScrollAttr}">
+        <f:variable name="ppAttributes">{ppAttributes} {ppScrollAttr}</f:variable>
+    </f:if>
+
+    <f:comment>====================== Pizpalue background ======================</f:comment>
+
+    <f:if condition="{tx_pizpalue_bgmedia}">
+        <f:variable name="ppStyles">{ppStyles} background-image: url({f:uri.image(image: tx_pizpalue_bgmedia.0)});</f:variable>
+        <f:variable name="ppClasses">{ppClasses} pp-bg-centercover</f:variable>
+    </f:if>
+
+    <f:comment>====================== Pizpalue attributes ======================</f:comment>
+
+    <f:if condition="{data.tx_pizpalue_classes}">
+        <f:variable name="ppClasses">
+            {ppClasses} {data.tx_pizpalue_classes}
+        </f:variable>
+    </f:if>
+
+    <f:if condition="{data.tx_pizpalue_style}">
+        <f:variable name="ppStyles">
+            {ppStyles} {data.tx_pizpalue_style}
+        </f:variable>
+    </f:if>
+
+    <f:if condition="{data.tx_pizpalue_attributes}">
+        <f:variable name="ppAttributes">
+            {ppAttributes} {data.tx_pizpalue_attributes}
+        </f:variable>
+    </f:if>
+
+    <f:comment>====================== Pizpalue animation variables ======================</f:comment>
+
+    <f:if condition="{data.tx_pizpalue_animation}">
+        <f:variable name="ppAnimation">{pizpalue.animation.{data.tx_pizpalue_animation}}</f:variable>
+
+        <f:if condition="{ppAnimation.classes}">
+            <f:variable name="ppClasses">
+                {ppClasses} {ppAnimation.classes}
+            </f:variable>
+        </f:if>
+
+        <f:if condition="{ppAnimation.style}">
+            <f:variable name="ppStyles">
+                {ppStyles} {ppAnimation.style}
+            </f:variable>
+        </f:if>
+
+        <f:if condition="{ppAnimation.attributes}">
+            <f:variable name="ppAttributes">
+                {ppAttributes} {ppAnimation.attributes}
+            </f:variable>
+        </f:if>
+    </f:if>
+
+
+    <f:comment>====================== Pizpalue tiles ======================</f:comment>
+
+    {f:variable(name: 'rendersTile', value: 0)}
+    {f:variable(name: 'rendersTile', value: 1) -> f:if(condition: '{data.layout} == "pp-tile-21"')}
+    {f:variable(name: 'rendersTile', value: 1) -> f:if(condition: '{data.layout} == "pp-tile-11"')}
+    {f:variable(name: 'rendersTile', value: 1) -> f:if(condition: '{data.layout} == "pp-tile-12"')}
+    <f:if condition="{rendersTile}">
+        <f:variable name="ppClasses">
+            {ppClasses} pp-tile {data.layout}
+        </f:variable>
+    </f:if>
+
+    <f:comment>====================== Pizpalue compile attributes ======================</f:comment>
+
+    {f:variable(name:'ppAllAttributes', value:'')}
+    <f:if condition="{ppClasses} || {ppStyles} || {ppAttributes}">
+        <f:if condition="{data.frame_class} == none">
+            <f:variable name="ppClasses">
+                pp-content {ppClasses} pp-type-{data.CType} {spaceBeforeClass} {spaceAfterClass}
+            </f:variable>
+        </f:if>
+        <f:variable name="ppAllAttributes">
+            {f:if(condition:'{ppClasses}', then:' class="{ppClasses}"')}
+            {f:if(condition:'{ppStyles}', then:' style="{ppStyles}"')}
+            {f:if(condition:'{ppAttributes}', then:' {ppAttributes}"')}
+        </f:variable>
+    </f:if>
+
+    <f:comment>====================== Pizpalue end ======================</f:comment>
+
+    <f:if condition="{data.frame_class} != none">
+        <f:then>
+            <div id="c{data.uid}" {ppAllAttributes -> pp:desarmAttribute()}>
+                <f:render partial="Frame/General/BackgroundImage" arguments="{_all}" />
+                <div class="frame-container">
+                    <div class="frame-inner">
+                        <f:if condition="{data._LOCALIZED_UID}">
+                            <a id="c{data._LOCALIZED_UID}"></a>
+                        </f:if>
+                        <f:render section="Before" optional="true">
+                            <f:render partial="DropIn/Before/All" arguments="{_all}" />
+                        </f:render>
+                        <f:render section="Header" optional="true">
+                            <f:render partial="Header/All" arguments="{_all}" />
+                        </f:render>
+                        <f:render section="Main" optional="true" />
+                        <f:render section="Footer" optional="true">
+                            <f:render partial="Footer/All" arguments="{_all}" />
+                        </f:render>
+                        <f:render section="After" optional="true">
+                            <f:render partial="DropIn/After/All" arguments="{_all}" />
+                        </f:render>
+                    </div>
+                </div>
+            </div>
+        </f:then>
+        <f:else>
+            <f:if condition="{ppAllAttributes}">
+                <f:then>
+                    <div id="c{data.uid}" {ppAllAttributes -> pp:desarmAttribute()}>
+                        <f:if condition="{rendersTile}">
+                            <div class="frame-container">
+                                <div class="frame-inner">
+                        </f:if>
+                        <f:if condition="{data._LOCALIZED_UID}">
+                            <a id="c{data._LOCALIZED_UID}"></a>
+                        </f:if>
+                        <f:render section="Before" optional="true">
+                            <f:render partial="DropIn/Before/All" arguments="{_all}" />
+                        </f:render>
+                        <f:render section="Header" optional="true">
+                            <f:render partial="Header/All" arguments="{_all}" />
+                        </f:render>
+                        <f:render section="Main" optional="true" />
+                        <f:render section="Footer" optional="true">
+                            <f:render partial="Footer/All" arguments="{_all}" />
+                        </f:render>
+                        <f:render section="After" optional="true">
+                            <f:render partial="DropIn/After/All" arguments="{_all}" />
+                        </f:render>
+                        <f:if condition="{rendersTile}">
+                                </div>
+                            </div>
+                        </f:if>
+                    </div>
+                </f:then>
+                <f:else>
+                    <a id="c{data.uid}"></a>
+                    <f:if condition="{data._LOCALIZED_UID}">
+                        <a id="c{data._LOCALIZED_UID}"></a>
+                    </f:if>
+                    <f:if condition="{data.space_before_class}">
+                        <div class="{spaceBeforeClass}"></div>
+                    </f:if>
+                    <f:render section="Before" optional="true">
+                        <f:render partial="DropIn/Before/All" arguments="{_all}" />
+                    </f:render>
+                    <f:render section="Header" optional="true">
+                        <f:render partial="Header/All" arguments="{_all}" />
+                    </f:render>
+                    <f:render section="Main" optional="true" />
+                    <f:render section="Footer" optional="true">
+                        <f:render partial="Footer/All" arguments="{_all}" />
+                    </f:render>
+                    <f:render section="After" optional="true">
+                        <f:render partial="DropIn/After/All" arguments="{_all}" />
+                    </f:render>
+                    <f:if condition="{data.space_after_class}">
+                        <div class="{spaceAfterClass}"></div>
+                    </f:if>
+                </f:else>
+            </f:if>
+        </f:else>
+    </f:if>
+</f:spaceless>
+</html>

@@ -1,0 +1,18 @@
+//
+// external: micro clearfix hack
+//
+.pp-cf:before,
+.pp-cf:after {
+  content: " ";
+  display: table;
+}
+.pp-cf:after, .clear {
+  clear: both;
+}
+
+//
+// Corrects image overflow on webkit engine
+//
+figure.image {
+  width: 100%;
+}

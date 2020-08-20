@@ -1,0 +1,25 @@
+plugin.tx_indexedsearch {
+   settings {
+      displayRules = 0
+      displayAdvancedSearchLink = 0
+   }
+   _LOCAL_LANG {
+      default {
+         displayResults.page =
+      }
+      de {
+         displayResults.page =
+      }
+      fr {
+         displayResults.page =
+      }
+   }
+}
+
+tt_content.list.20.indexedsearch_pi2.stdWrap.wrap = <div class="pp-indexed-search">|</div>
+
+page {
+   includeCSS {
+      indexedSearch = EXT:pizpalue/Extensions/indexed_search/Resources/Public/Scss/main.scss
+   }
+}
